@@ -162,13 +162,13 @@
         </div>
     </div>
 
-    <script>
+   <script>
         const incidentForm = document.getElementById('incidentForm');
         const incidentFeed = document.getElementById('incidentFeed');
 
         let incidents = JSON.parse(localStorage.getItem('sim_incidents')) || [
-            { type: 'Theft/Stealing', location: 'Main Campus Quad', details: 'Phone snatched while walking around evening hours.', time: 'Recent' },
-            { type: 'Physical Assault/Stabbing', location: 'Perimeter Boundary Road', details: 'Aggressive encounter reported near dark zone.', time: '1 day ago' }
+            { id: 'SIM-1042', type: 'Theft/Stealing', location: 'Main Campus Quad', details: 'Phone snatched while walking around evening hours.', time: 'Recent' },
+            { id: 'SIM-1041', type: 'Physical Assault/Stabbing', location: 'Perimeter Boundary Road', details: 'Aggressive encounter reported near dark zone.', time: '1 day ago' }
         ];
 
         function renderIncidents() {
@@ -181,10 +181,10 @@
                 const div = document.createElement('div');
                 div.className = 'incident-item';
                 div.innerHTML = `
-                    <h4>${item.type}</h4>
+                    <h4>${item.type} <span style="color: var(--accent); font-size: 0.8rem; float: right;">${item.id}</span></h4>
                     <p><strong>Location:</strong> ${item.location}</p>
                     <p>${item.details || 'No details provided.'}</p>
-                    <p style="font-size: 0.75rem; margin-top: 5px; color: var(--accent);">Logged: ${item.time}</p>
+                    <p style="font-size: 0.75rem; margin-top: 5px; color: var(--text-muted);">Logged: ${item.time}</p>
                 `;
                 incidentFeed.appendChild(div);
             });
@@ -195,8 +195,11 @@
             const type = document.getElementById('incidentType').value;
             const location = document.getElementById('location').value;
             const details = document.getElementById('details').value;
+            
+            const randomId = 'SIM-' + Math.floor(1000 + Math.random() * 9000);
 
             const newIncident = {
+                id: randomId,
                 type,
                 location,
                 details,
@@ -207,6 +210,8 @@
             localStorage.setItem('sim_incidents', JSON.stringify(incidents));
             renderIncidents();
             incidentForm.reset();
+            
+            alert('Report submitted successfully! Your tracking reference number is: ' + randomId);
         });
 
         renderIncidents();
